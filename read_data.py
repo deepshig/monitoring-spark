@@ -2,7 +2,6 @@ import pyspark
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
-import pandas as pd
 
 sc = SparkContext()
 
