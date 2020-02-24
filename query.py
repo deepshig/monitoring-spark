@@ -46,8 +46,7 @@ number_of_conditions = rd.randint(1, 17)
 for _ in range(number_of_conditions):
     condition_index = rd.randint(1, 17)
     condition_name = attributes[condition_index]
+
     possible_values = attributeValues[condition_name]
-    print(possible_values)
-    value_index = rd.randint(0, (len(possible_values) + 1))
+    value_index = rd.randint(0, (len(possible_values)-1))
     value = possible_values[value_index]
-    print("name : ", condition_name, "value : ", value)
