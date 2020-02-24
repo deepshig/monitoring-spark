@@ -2,6 +2,7 @@ import pyspark
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from query import generate_query
 
 sc = SparkContext()
 
@@ -32,6 +33,5 @@ print()
 data = spark.read.csv("./sample_data.csv", header=True, schema=schema)
 data.registerTempTable("voting_records")
 
-results = spark.sql(
-    "SELECT * FROM voting_records WHERE mx_missile='n' AND adoption_of_the_budget_resolution='n' AND religious_groups_in_schools='?'")
+results = spark.sql(generate_query())
 results.show()
