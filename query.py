@@ -40,13 +40,20 @@ attributeValues = {
     "export-administration-act-south-africa": ["y", "n", "?"]
 }
 
-rd.seed()
-number_of_conditions = rd.randint(1, 17)
 
-for _ in range(number_of_conditions):
-    condition_index = rd.randint(1, 17)
-    condition_name = attributes[condition_index]
+def get_random_conditions():
+    rd.seed()
+    number_of_conditions = rd.randint(1, 17)
 
-    possible_values = attributeValues[condition_name]
-    value_index = rd.randint(0, (len(possible_values)-1))
-    value = possible_values[value_index]
+    conditions = {}
+    for _ in range(number_of_conditions):
+        condition_index = rd.randint(1, 17)
+        condition_name = attributes[condition_index]
+
+        possible_values = attributeValues[condition_name]
+        value_index = rd.randint(0, (len(possible_values)-1))
+        value = possible_values[value_index]
+
+        conditions[condition_name] = value
+
+    return conditions
