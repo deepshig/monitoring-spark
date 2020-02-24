@@ -57,3 +57,21 @@ def get_random_conditions():
         conditions[condition_name] = value
 
     return conditions
+
+
+def generate_query():
+    query = "SELECT * FROM voting_records WHERE "
+    condtions = get_random_conditions()
+
+    i = 0
+    for name in condtions:
+        query = query + name + "='" + condtions[name] + "'"
+
+        if i < len(condtions)-1:
+            query = query + " AND "
+        else:
+            query = query + ";"
+
+        i = i+1
+
+    return query
