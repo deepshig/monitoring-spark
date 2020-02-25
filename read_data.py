@@ -33,5 +33,8 @@ print()
 data = spark.read.csv("./sample_data.csv", header=True, schema=schema)
 data.registerTempTable("voting_records")
 
-results = spark.sql(generate_query())
-results.show()
+for i in range(1000000):
+    select_query = generate_query()
+    print(select_query)
+    results = spark.sql(select_query)
+    results.show()
