@@ -14,7 +14,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /usr/src/app/data_generator
 
 # Copy the required contents into the container at /converter
-COPY data_generator/ .
+COPY . .
 
 # Install the required dependencies (including pyspark)
 RUN pip install --no-cache-dir -r requirements.txt
