@@ -3,6 +3,7 @@ from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 from query import generate_query
+from publisher import init_queue, shutdown_queue, publish
 
 sc = SparkContext()
 
@@ -33,8 +34,14 @@ print()
 data = spark.read.csv("./sample_data.csv", header=True, schema=schema)
 data.registerTempTable("voting_records")
 
+init_queue()
+
+publish("Sample event")
+
 for i in range(1000000):
     select_query = generate_query()
     print(select_query)
     results = spark.sql(select_query)
     results.show()
+
+shutdown_queue()
