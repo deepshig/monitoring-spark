@@ -18,8 +18,6 @@ services:
     volumes:
       - rabbit_mqdata:/usr/share/rabbitmq/data
 
-  # produces container builds the producer image
-  # and produces message to the queue
   data_generator:
     build: data_generator
     depends_on:
