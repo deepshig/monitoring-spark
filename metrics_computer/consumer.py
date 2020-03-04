@@ -2,7 +2,7 @@ import pika
 import time
 import os
 
-QUEUE_NAME: 'monitoring_events'
+QUEUE_NAME = 'monitoring_events'
 
 
 def get_connection():
@@ -45,7 +45,7 @@ def consume():
     chan = connection.channel()
 
     chan.basic_qos(prefetch_count=1)
-    chan.basic_consume(queue='hello',
+    chan.basic_consume(queue=QUEUE_NAME,
                        on_message_callback=receive_msg)
 
     print("Waiting to consume")

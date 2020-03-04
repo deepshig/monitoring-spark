@@ -3,7 +3,6 @@
 
 ## Monitoring Spark
 
-
 ### Dependencies
 
 * Python 3.7

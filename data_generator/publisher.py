@@ -1,7 +1,7 @@
 import pika
 import os
 
-QUEUE_NAME: 'monitoring_events'
+QUEUE_NAME = 'monitoring_events'
 
 
 def get_connection():
