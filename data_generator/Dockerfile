@@ -16,3 +16,5 @@ ADD ./requirements.txt      /work/requirements.txt
 # Install the required dependencies (including pyspark)
 RUN pip install --no-cache-dir -r requirements.txt
 
+CMD ["python3", "./read_data.py"]
+
