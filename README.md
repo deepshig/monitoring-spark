@@ -5,11 +5,11 @@
 
 ### Dependencies
 
-* Python 3.7
-* Docker
-* Pyspark 2.4.5
-* Pika
-* RabbitMQ 3.8.3-rc.1
+* [Python 3.7](https://www.python.org/downloads/release/python-370/)
+* [Docker](https://www.docker.com/)
+* [Pyspark 2.4.5](https://spark.apache.org/docs/latest/)
+* [Pika](https://github.com/pika/pika)
+* [RabbitMQ 3.8.3-rc.1](https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.8.3-rc.1)
 
 ### Run the program
 
