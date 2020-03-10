@@ -50,3 +50,6 @@ def consume():
 
     print("Waiting to consume")
     chan.start_consuming()
+
+
+consume()
