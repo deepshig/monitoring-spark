@@ -4,15 +4,20 @@ FROM python:3.7
 # Update apt-get repositories
 RUN apt-get update && apt-get install default-jdk --assume-yes
 
+# install pika to access rabbitmq
+RUN pip install pika
+
+# Without this setting, Python never prints anything out.
+ENV PYTHONUNBUFFERED=1
+
 # Set the working directory to the /work directory
-WORKDIR /work
+WORKDIR /usr/src/app/data_generator
 
 # Copy the required contents into the container at /converter
-ADD ./read_data.py          /work/read_data.py
-ADD ./query.py              /work/query.py
-ADD ./sample_data.csv       /work/sample_data.csv
-ADD ./requirements.txt      /work/requirements.txt
+COPY . .
 
 # Install the required dependencies (including pyspark)
 RUN pip install --no-cache-dir -r requirements.txt
 
+# start command
+CMD [ "python", "read_data.py" ]

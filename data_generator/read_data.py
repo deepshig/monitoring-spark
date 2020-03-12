@@ -1,8 +1,12 @@
 import pyspark
+import time
+import uuid
+import json
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 from query import generate_query
+from publisher import init_queue, shutdown_queue, publish
 
 sc = SparkContext()
 
@@ -33,8 +37,31 @@ print()
 data = spark.read.csv("./sample_data.csv", header=True, schema=schema)
 data.registerTempTable("voting_records")
 
+
+def publish_metric(start_time, end_time):
+    time_taken = end_time - start_time
+    event = {
+        "id": str(uuid.uuid4()),
+        "start_time": start_time,
+        "time_taken": time_taken
+    }
+
+    event_json = json.dumps(event)
+    publish(event_json)
+
+
+init_queue()
+
 for i in range(1000000):
+    start_time = time.time()
+
     select_query = generate_query()
     print(select_query)
     results = spark.sql(select_query)
+
+    end_time = time.time()
     results.show()
+
+    publish_metric(start_time, end_time)
+
+shutdown_queue()
