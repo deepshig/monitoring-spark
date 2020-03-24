@@ -8,8 +8,9 @@ import json
 import sys
 sys.path.append('../')
 
-from rabbitmq.manager import init_queue, shutdown_queue, publish  # NOQA
-from query import generate_query  # NOQA
+from rabbitmq.manager import init_queue, shutdown_queue  # NOQA
+from data_generator.query import generate_query  # NOQA
+from data_generator.publisher import publish_metric  # NOQA
 
 sc = SparkContext()
 
@@ -40,22 +41,9 @@ print()
 data = spark.read.csv("./sample_data.csv", header=True, schema=schema)
 data.registerTempTable("voting_records")
 
-
-def publish_metric(start_time, end_time):
-    time_taken = end_time - start_time
-    event = {
-        "id": str(uuid.uuid4()),
-        "start_time": start_time,
-        "time_taken": time_taken
-    }
-
-    event_json = json.dumps(event)
-    publish(event_json)
-
-
 init_queue()
 
-for i in range(1000000):
+for i in range(10):
     start_time = time.time()
 
     select_query = generate_query()
