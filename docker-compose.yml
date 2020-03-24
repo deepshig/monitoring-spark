@@ -19,7 +19,9 @@ services:
       - rabbit_mqdata:/usr/share/rabbitmq/data
 
   data_generator:
-    build: data_generator
+    build:
+      context: ./
+      dockerfile: ./data_generator/Dockerfile
     depends_on:
         - rabbit_mq
     environment:
@@ -28,7 +30,9 @@ services:
       - ./data_generator:/usr/src/app/data_generator
 
   metrics_computer:
-    build: metrics_computer
+    build:
+      context: ./
+      dockerfile: ./metrics_computer/Dockerfile
     depends_on:
         - rabbit_mq
     environment:

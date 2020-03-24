@@ -15,9 +15,10 @@ WORKDIR /usr/src/app/data_generator
 
 # Copy the required contents into the container at /converter
 COPY . .
+COPY rabbitmq ../rabbitmq
 
 # Install the required dependencies (including pyspark)
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r ./data_generator/requirements.txt
 
 # start command
 CMD [ "python", "read_data.py" ]
