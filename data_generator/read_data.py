@@ -1,12 +1,15 @@
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+from pyspark.sql import SparkSession
+from pyspark import SparkContext
 import pyspark
 import time
 import uuid
 import json
-from pyspark import SparkContext
-from pyspark.sql import SparkSession
-from pyspark.sql.types import StructType, StructField, IntegerType, StringType
-from query import generate_query
-from publisher import init_queue, shutdown_queue, publish
+import sys
+sys.path.append('../')
+
+from rabbitmq.manager import init_queue, shutdown_queue, publish  # NOQA
+from query import generate_query  # NOQA
 
 sc = SparkContext()
 
