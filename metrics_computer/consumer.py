@@ -1,34 +1,13 @@
 import pika
 import time
 import os
+import sys
+sys.path.append('../')
 
-QUEUE_NAME = 'monitoring_events'
-
-
-def get_connection():
-    amqp_url = os.environ['AMQP_URL']
-    url_params = pika.URLParameters(amqp_url)
-
-    connection = pika.BlockingConnection(url_params)
-    return connection
+from rabbitmq.manager import init_queue, shutdown_queue, consume  # NOQA
 
 
-def init_queue():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.queue_declare(queue=QUEUE_NAME, durable=True)
-
-
-def shutdown_queue():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.close()
-    connection.close()
-
-
-def receive_msg(ch, method, properties, body):
+def msg_callback_handler(ch, method, properties, body):
     """function to receive the message from rabbitmq
     print it
     sleep for 2 seconds
@@ -40,16 +19,6 @@ def receive_msg(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def consume():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.basic_qos(prefetch_count=1)
-    chan.basic_consume(queue=QUEUE_NAME,
-                       on_message_callback=receive_msg)
-
-    print("Waiting to consume")
-    chan.start_consuming()
-
-
-consume()
+init_queue()
+consume(msg_callback_handler)
+shutdown_queue()
