@@ -25,6 +25,6 @@ def msg_callback_handler(ch, method, properties, body):
 
 try:
     consume(msg_callback_handler)
-except KeyboardInterrupt:
+except:
     shutdown_queue()
     db_cluster_shutdown()
