@@ -23,3 +23,8 @@ def create_keyspace_and_tables(session):
 
     create_table_query = "CREATE TABLE %s ( id uuid PRIMARY KEY, start_time float, time_taken float)" % DB_FETCH_TIME_TAKEN_TABLE
     session.execute(create_table_query)
+
+
+def store_event(session, event):
+    data = json.loads(event)
+    print("received event : ", data)
