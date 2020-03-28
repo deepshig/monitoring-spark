@@ -5,10 +5,10 @@ import sys
 sys.path.append('../')
 
 from rabbitmq.manager import init_queue, shutdown_queue, consume  # NOQA
-from metrics_computer.data_writer import create_session, create_keyspace_and_tables, store_event, shudown  # NOQA
+from metrics_computer.data_writer import create_session, create_keyspace_and_tables, store_event  # NOQA
 
 init_queue()
-db_session = create_session()
+db_session, db_cluster_shutdown = create_session()
 create_keyspace_and_tables(db_session)
 
 
@@ -26,3 +26,4 @@ def msg_callback_handler(ch, method, properties, body):
 
 consume(msg_callback_handler)
 shutdown_queue()
+db_cluster_shutdown()

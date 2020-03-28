@@ -8,11 +8,7 @@ DB_FETCH_TIME_TAKEN_TABLE = 'db_fetch_time_taken'
 def create_session():
     cluster = Cluster()
     session = cluster.connect()
-    return session
-
-
-def shudown(cluster):
-    cluster.shudown()
+    return session, cluster.shutdown
 
 
 def create_keyspace_and_tables(session):
