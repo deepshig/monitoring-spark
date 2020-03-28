@@ -14,8 +14,7 @@ create_keyspace_and_tables(db_session)
 
 def msg_callback_handler(ch, method, properties, body):
     """function to receive the message from rabbitmq
-    print it
-    sleep for 2 seconds
+    stores in cassandra DB
     ack the message"""
 
     event = body.decode('utf-8')

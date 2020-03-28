@@ -43,7 +43,7 @@ data.registerTempTable("voting_records")
 
 init_queue()
 
-for i in range(10):
+for i in range(100000000):
     start_time = time.time()
 
     select_query = generate_query()
