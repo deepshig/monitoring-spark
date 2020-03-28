@@ -24,6 +24,8 @@ def msg_callback_handler(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-consume(msg_callback_handler)
-shutdown_queue()
-db_cluster_shutdown()
+try:
+    consume(msg_callback_handler)
+except KeyboardInterrupt:
+    shutdown_queue()
+    db_cluster_shutdown()
