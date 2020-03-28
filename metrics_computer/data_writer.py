@@ -2,7 +2,7 @@ from cassandra.cluster import Cluster
 import json
 
 KEYSPACE = 'monitoring_events'
-DB_FETCH_TIME_TAKEN_TABLE = 'db_fetch_itme_taken'
+DB_FETCH_TIME_TAKEN_TABLE = 'db_fetch_time_taken'
 
 
 def create_session():
