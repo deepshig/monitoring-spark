@@ -19,6 +19,7 @@ def msg_callback_handler(ch, method, properties, body):
 
     event = body.decode('utf-8')
     store_event(db_session, event)
+    # call the function to compute metrics
     print('acking it')
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
