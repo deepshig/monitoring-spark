@@ -18,60 +18,40 @@ services:
 
   cassandra_node1:
     image: cassandra:3.11.6
-    # In case this is the first time starting up cassandra we need to ensure
-    # that all nodes do not start up at the same time. Cassandra has a
-    # 2 minute rule i.e. 2 minutes between each node boot up. Booting up
-    # nodes simultaneously is a mistake. This only needs to happen the first
-    # time we bootup. Configuration below assumes if the Cassandra data
-    # directory is empty it means that we are starting up for the first
-    # time.
     container_name: cassandra_node1
-    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+    command: /bin/bash -c "/docker-entrypoint.sh cassandra -f"
     volumes:
       - ./cassandra_node1:/var/lib/cassandra
-    deploy:
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 20M
     environment:
       CASSANDRA_CLUSTER_NAME: monitoring_cluster
       CASSANDRA_SEEDS: cassandra_node1
-    # Exposing ports for inter cluste communication
+    # Exposing ports for intra cluster communication
     expose:
-      # Intra-node communication
-      - 7000
-      # TLS intra-node communication
-      - 7001
-      # JMX
-      - 7199
-      # CQL
-      - 9042
-      # Thrift service
-      - 9160
+      - 7000 # Intra-node communication
+      - 7001 # TLS intra-node communication
+      - 7199 # JMX
+      - 9042 # CQL
+      - 9160 # Thrift service
     ports:
       - 9042:9042
+      - 7199:7199
+      - 9160:9160
     ulimits:
       memlock: -1
       nproc: 32768
       nofile: 100000
 
   cassandra_node2:
-    image: cassandra:3.11.2
+    image: cassandra:3.11.6
     container_name: cassandra_node2
-    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+    command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
     volumes:
       - ./cassandra_node2:/var/lib/cassandra
-    deploy:
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 20M
     environment:
       CASSANDRA_CLUSTER_NAME: monitoring_cluster
       CASSANDRA_SEEDS: cassandra_node1
+    depends_on:
+      - cassandra_node1
     expose:
       - 7000
       - 7001
@@ -84,20 +64,16 @@ services:
       nofile: 100000
 
   cassandra_node3:
-    image: cassandra:3.11.2
+    image: cassandra:3.11.6
     container_name: cassandra_node3
-    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+    command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
     volumes:
       - ./cassandra_node3:/var/lib/cassandra
-    deploy:
-      resources:
-        limits:
-          memory: 50M
-        reservations:
-          memory: 20M
     environment:
       CASSANDRA_CLUSTER_NAME: monitoring_cluster
       CASSANDRA_SEEDS: cassandra_node1
+    depends_on:
+      - cassandra_node1
     expose:
       - 7000
       - 7001
@@ -130,9 +106,10 @@ services:
       - rabbit_mq
       - cassandra_node1
       - cassandra_node2
+      - cassandra_node3
+    command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run' && sleep 75 && python consumer.py"
     environment:
       AMQP_URL: 'amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
-      CASSANDRA_HOSTS: 'node1,node2'
     volumes:
       - ./metrics_computer:/usr/src/app/metrics_computer
 
