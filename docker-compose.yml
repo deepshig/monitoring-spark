@@ -83,6 +83,32 @@ services:
       nproc: 32768
       nofile: 100000
 
+  cassandra_node3:
+    image: cassandra:3.11.2
+    container_name: cassandra_node3
+    command: bash -c 'if [ -z "$$(ls -A /var/lib/cassandra/)" ] ; then sleep 0; fi && /docker-entrypoint.sh cassandra -f'
+    volumes:
+      - ./cassandra_node3:/var/lib/cassandra
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+        reservations:
+          memory: 20M
+    environment:
+      CASSANDRA_CLUSTER_NAME: monitoring_cluster
+      CASSANDRA_SEEDS: cassandra_node1
+    expose:
+      - 7000
+      - 7001
+      - 7199
+      - 9042
+      - 9160
+    ulimits:
+      memlock: -1
+      nproc: 32768
+      nofile: 100000
+
   data_generator:
     build:
       context: ./

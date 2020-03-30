@@ -6,13 +6,14 @@ DB_FETCH_TIME_TAKEN_TABLE = 'db_fetch_time_taken'
 
 
 def create_session():
-    cluster = Cluster()
+    cluster = Cluster(
+        ['cassandra_node1', 'cassandra_node2', 'cassandra_node3'])
     session = cluster.connect()
     return session, cluster.shutdown
 
 
 def create_keyspace_and_tables(session):
-    create_keyspace_query = "CREATE KEYSPACE IF NOT EXISTS %s WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 1};" % KEYSPACE
+    create_keyspace_query = "CREATE KEYSPACE IF NOT EXISTS %s WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : 2};" % KEYSPACE
     session.execute(create_keyspace_query)
 
     session.set_keyspace(KEYSPACE)
