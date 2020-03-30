@@ -1,3 +1,6 @@
 __pycache__
 spark-warehouse
 portainer-data
+cassandra_node1
+cassandra_node2
+cassandra_node3
