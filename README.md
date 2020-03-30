@@ -8,8 +8,10 @@
 * [Python 3.7](https://www.python.org/downloads/release/python-370/)
 * [Docker](https://www.docker.com/)
 * [Pyspark 2.4.5](https://spark.apache.org/docs/latest/)
-* [Pika](https://github.com/pika/pika)
+* [Pika 1.1.0](https://github.com/pika/pika)
 * [RabbitMQ 3.8.3-rc.1](https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.8.3-rc.1)
+* [Cassandra 3.11.6](http://cassandra.apache.org/)
+* [Python-Cassandra-Driver 3.22.0](https://docs.datastax.com/en/developer/python-driver/3.22/)
 
 ### Run the program
 
