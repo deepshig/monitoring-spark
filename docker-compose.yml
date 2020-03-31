@@ -25,6 +25,7 @@ services:
     environment:
       CASSANDRA_CLUSTER_NAME: monitoring_cluster
       CASSANDRA_SEEDS: cassandra_node1
+      CASSANDRA_START_RPC: 'true'
     # Exposing ports for intra cluster communication
     expose:
       - 7000 # Intra-node communication
@@ -50,6 +51,7 @@ services:
     environment:
       CASSANDRA_CLUSTER_NAME: monitoring_cluster
       CASSANDRA_SEEDS: cassandra_node1
+      CASSANDRA_START_RPC: 'true'
     depends_on:
       - cassandra_node1
     expose:
@@ -72,6 +74,7 @@ services:
     environment:
       CASSANDRA_CLUSTER_NAME: monitoring_cluster
       CASSANDRA_SEEDS: cassandra_node1
+      CASSANDRA_START_RPC: 'true'
     depends_on:
       - cassandra_node1
     expose:
@@ -107,7 +110,7 @@ services:
       - cassandra_node1
       - cassandra_node2
       - cassandra_node3
-    command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run' && sleep 75 && python consumer.py"
+    command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run' && sleep 100 && python consumer.py"
     environment:
       AMQP_URL: 'amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
     volumes:
