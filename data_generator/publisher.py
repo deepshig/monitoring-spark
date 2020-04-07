@@ -1,36 +1,18 @@
-import pika
-import os
+import uuid
+import json
+import sys
+sys.path.append('../')
 
-QUEUE_NAME = 'monitoring_events'
-
-
-def get_connection():
-    amqp_url = os.environ['AMQP_URL']
-    url_params = pika.URLParameters(amqp_url)
-
-    connection = pika.BlockingConnection(url_params)
-    return connection
+from rabbitmq.manager import publish  # NOQA
 
 
-def init_queue():
-    connection = get_connection()
-    chan = connection.channel()
+def publish_metric(start_time, end_time):
+    time_taken = end_time - start_time
+    event = {
+        "id": str(uuid.uuid4()),
+        "start_time": start_time,
+        "time_taken": time_taken
+    }
 
-    chan.queue_declare(queue=QUEUE_NAME, durable=True)
-
-
-def shutdown_queue():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.close()
-    connection.close()
-
-
-def publish(message_body):
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.basic_publish(exchange='', routing_key=QUEUE_NAME,
-                       body=message_body, properties=pika.BasicProperties(delivery_mode=2))
-    print("Produced the message")
+    event_json = json.dumps(event)
+    publish(event_json)

@@ -1,55 +1,31 @@
 import pika
 import time
 import os
+import sys
+sys.path.append('../')
 
-QUEUE_NAME = 'monitoring_events'
+from rabbitmq.manager import init_queue, shutdown_queue, consume  # NOQA
+from metrics_computer.data_writer import create_session, create_keyspace_and_tables, store_event  # NOQA
 
-
-def get_connection():
-    amqp_url = os.environ['AMQP_URL']
-    url_params = pika.URLParameters(amqp_url)
-
-    connection = pika.BlockingConnection(url_params)
-    return connection
-
-
-def init_queue():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.queue_declare(queue=QUEUE_NAME, durable=True)
+init_queue()
+db_session, db_cluster_shutdown = create_session()
+create_keyspace_and_tables(db_session)
 
 
-def shutdown_queue():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.close()
-    connection.close()
-
-
-def receive_msg(ch, method, properties, body):
+def msg_callback_handler(ch, method, properties, body):
     """function to receive the message from rabbitmq
-    print it
-    sleep for 2 seconds
+    stores in cassandra DB
     ack the message"""
 
-    print('received msg : ', body.decode('utf-8'))
-    time.sleep(2)
+    event = body.decode('utf-8')
+    store_event(db_session, event)
+    # call the function to compute metrics
     print('acking it')
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def consume():
-    connection = get_connection()
-    chan = connection.channel()
-
-    chan.basic_qos(prefetch_count=1)
-    chan.basic_consume(queue=QUEUE_NAME,
-                       on_message_callback=receive_msg)
-
-    print("Waiting to consume")
-    chan.start_consuming()
-
-
-consume()
+try:
+    consume(msg_callback_handler)
+except:
+    shutdown_queue()
+    db_cluster_shutdown()
