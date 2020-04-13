@@ -53,6 +53,6 @@ for i in range(100000000):
     end_time = time.time()
     results.show()
 
-    publish_metric(start_time, end_time)
+    publish_metric(start_time, end_time, results.count())
 
 shutdown_queue()
