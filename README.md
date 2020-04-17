@@ -27,13 +27,13 @@ The above image summarizes the architecture followed in the project. Going by de
 
 The project uses the following technological stack :
 
-* [Python 3.7](https://www.python.org/downloads/release/python-370/)
-* [Docker](https://www.docker.com/)
-* [Pyspark 2.4.5](https://spark.apache.org/docs/latest/)
-* [Pika 1.1.0](https://github.com/pika/pika)
-* [RabbitMQ 3.8.3-rc.1](https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.8.3-rc.1)
-* [Cassandra 3.11.6](http://cassandra.apache.org/)
-* [Python-Cassandra-Driver 3.22.0](https://docs.datastax.com/en/developer/python-driver/3.22/)
+* [Python 3.7](https://www.python.org/downloads/release/python-370/) : We chose Python as our working language because it provides easy to use and readily available libraries for all the other dependencies, with detailed documentation.
+* [Docker](https://www.docker.com/) : In order to maintain the uniformity of deployment, we use docker as deployment engine.
+* [Pyspark 2.4.5](https://spark.apache.org/docs/latest/) : We use [Apache Spark](https://spark.apache.org/) to achieve high performance for both batch and streaming data. PySpark enables us to use the Spark APIs in Python.
+* [RabbitMQ 3.8.3-rc.1](https://github.com/rabbitmq/rabbitmq-server/releases/tag/v3.8.3-rc.1) : We need to pass on monitoring events from one docker container to another, asynchronously. Thus, we use the event queue mechanism provided by RabbitMQ.
+* [Pika 1.1.0](https://github.com/pika/pika) : It provides the APIs to connect to RabbitMQ in Python.
+* [Cassandra 3.11.6](http://cassandra.apache.org/) : We use Cassandra to store the historical data of monitoring events, which is further used for batch processing. Given the current implementation, we could have very achieved similar results with a RDBMS like PostgreSQL too.
+* [Python-Cassandra-Driver 3.22.0](https://docs.datastax.com/en/developer/python-driver/3.22/) : It enables us to use the Cassandra APIs in Python
 
 ### Running the program
 
