@@ -24,7 +24,7 @@ def create_keyspace_and_tables(session):
 
 def insert(session, data):
     insert_query = "INSERT INTO %s (id, start_time, time_taken, no_of_records) VALUES( %s, %s, %s, %s);" % (
-        DB_FETCH_TIME_TAKEN_TABLE, data['id'], data['start_time'], data['time_taken'], data['time_taken'])
+        DB_FETCH_TIME_TAKEN_TABLE, data['id'], data['start_time'], data['time_taken'], data['no_of_records'])
     print(insert_query)
     session.execute(insert_query)
 
