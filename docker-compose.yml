@@ -42,51 +42,51 @@ services:
       nproc: 32768
       nofile: 100000
 
-  # cassandra_node2:
-  #   image: cassandra:3.11.6
-  #   container_name: cassandra_node2
-  #   command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
-  #   volumes:
-  #     - ./cassandra_node2:/var/lib/cassandra
-  #   environment:
-  #     CASSANDRA_CLUSTER_NAME: monitoring_cluster
-  #     CASSANDRA_SEEDS: cassandra_node1
-  #     CASSANDRA_START_RPC: 'true'
-  #   depends_on:
-  #     - cassandra_node1
-  #   expose:
-  #     - 7000
-  #     - 7001
-  #     - 7199
-  #     - 9042
-  #     - 9160
-  #   ulimits:
-  #     memlock: -1
-  #     nproc: 32768
-  #     nofile: 100000
+  cassandra_node2:
+    image: cassandra:3.11.6
+    container_name: cassandra_node2
+    command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
+    volumes:
+      - ./cassandra_node2:/var/lib/cassandra
+    environment:
+      CASSANDRA_CLUSTER_NAME: monitoring_cluster
+      CASSANDRA_SEEDS: cassandra_node1
+      CASSANDRA_START_RPC: 'true'
+    depends_on:
+      - cassandra_node1
+    expose:
+      - 7000
+      - 7001
+      - 7199
+      - 9042
+      - 9160
+    ulimits:
+      memlock: -1
+      nproc: 32768
+      nofile: 100000
 
-  # cassandra_node3:
-  #   image: cassandra:3.11.6
-  #   container_name: cassandra_node3
-  #   command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
-  #   volumes:
-  #     - ./cassandra_node3:/var/lib/cassandra
-  #   environment:
-  #     CASSANDRA_CLUSTER_NAME: monitoring_cluster
-  #     CASSANDRA_SEEDS: cassandra_node1
-  #     CASSANDRA_START_RPC: 'true'
-  #   depends_on:
-  #     - cassandra_node1
-  #   expose:
-  #     - 7000
-  #     - 7001
-  #     - 7199
-  #     - 9042
-  #     - 9160
-  #   ulimits:
-  #     memlock: -1
-  #     nproc: 32768
-  #     nofile: 100000
+  cassandra_node3:
+    image: cassandra:3.11.6
+    container_name: cassandra_node3
+    command: /bin/bash -c "echo 'Waiting for seed node' && sleep 30 && /docker-entrypoint.sh cassandra -f"
+    volumes:
+      - ./cassandra_node3:/var/lib/cassandra
+    environment:
+      CASSANDRA_CLUSTER_NAME: monitoring_cluster
+      CASSANDRA_SEEDS: cassandra_node1
+      CASSANDRA_START_RPC: 'true'
+    depends_on:
+      - cassandra_node1
+    expose:
+      - 7000
+      - 7001
+      - 7199
+      - 9042
+      - 9160
+    ulimits:
+      memlock: -1
+      nproc: 32768
+      nofile: 100000
 
   data_generator:
     build:
@@ -141,8 +141,8 @@ services:
     depends_on:
       - rabbit_mq
       - cassandra_node1
-      # - cassandra_node2
-      # - cassandra_node3
+      - cassandra_node2
+      - cassandra_node3
       - spark-worker
     command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run..' && sleep 60 && python3 consumer.py"
     environment:
