@@ -19,7 +19,7 @@ The above image summarizes the architecture followed in the project. Going by de
 
 * In the package `metrics_computer`, we consume and unmarshal these events. They are used for both, batched processing and stream processing. We first store these events in a `Cassandra` database, and then feed them to a spark cluster ffor live processing.
 
-* Describe batch processing algorithm
+* Describe batch processing algorithm: We take the data from 'Cassandra' database and find the median and standard deviatan of the data. (Work in progress)
 
 * stream processing algorithm: For the stream processing, data geerated from the rabbitMQ is streamed to the spark cluster directly. A connection is established in the 'socket_client.py' file. After this, the file 'streaming_processor.py' consumes the events and this is where we calculate the running average of the 'no_of_rows' data. 
 
