@@ -1,9 +1,10 @@
+import sys
 from pyspark.streaming import StreamingContext
 from pyspark import SparkContext
 import socket
 import threading
 import time
-import sys
+import json
 
 sys.path.append('../')
 
@@ -21,9 +22,15 @@ def msg_callback_handler(ch, method, properties, body):
     ack the message"""
 
     event = body.decode('utf-8')
+    data = json.loads(event)
 
     store_event(db_session, event)
-    streaming_socket.sendall(str.encode(event))
+    try:
+        time_taken = str(data['time_taken'])
+        streaming_socket.sendall(str.encode(time_taken))
+    except Exception as e:
+        print("error sending to spark socket {}".format(e))
+
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
