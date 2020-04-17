@@ -28,16 +28,17 @@ def msg_callback_handler(ch, method, properties, body):
 
 
 def main():
-    print("python main function")
-
     init_queue()
+    print("Initialised RabbitMQ")
 
     global db_session
     db_session, db_cluster_shutdown = create_session()
     create_keyspace_and_tables(db_session)
+    print("Initialised Cassandra DB")
 
     global streaming_socket
     streaming_socket = create_socket()
+    print("Created Streaming Socket")
 
     try:
         consume(msg_callback_handler)

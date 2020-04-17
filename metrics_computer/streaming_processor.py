@@ -1,6 +1,5 @@
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext, DStream
-from pyspark.serializers import UTF8Deserializer
 
 
 def processor():
@@ -10,7 +9,6 @@ def processor():
     ssc = StreamingContext(sc, 2)
 
     data = ssc.socketTextStream('0.0.0.0', 8080)
-
     data.pprint()
 
     ssc.start()
