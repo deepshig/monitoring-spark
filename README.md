@@ -21,7 +21,8 @@ The above image summarizes the architecture followed in the project. Going by de
 
 * Describe batch processing algorithm
 
-* Describe stream processing algorithm
+* stream processing algorithm: For the stream processing, data geerated from the rabbitMQ is streamed to the spark cluster directly. A connection is established in the 'socket_client.py' file. After this, the file 'streaming_processor.py' consumes the events and this is where we calculate the running average of the 'no_of_rows' data. 
+
 
 ### Dependencies
 
