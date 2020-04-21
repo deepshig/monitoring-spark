@@ -27,7 +27,7 @@ def msg_callback_handler(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def main():
+def init_consumer():
     init_queue()
     print("Initialised RabbitMQ")
 
@@ -46,7 +46,3 @@ def main():
         shutdown_queue()
         db_cluster_shutdown()
         streaming_socket.close()
-
-
-if __name__ == '__main__':
-    main()

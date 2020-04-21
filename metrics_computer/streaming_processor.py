@@ -13,6 +13,3 @@ def processor():
 
     ssc.start()
     ssc.awaitTermination()
-
-
-processor()
