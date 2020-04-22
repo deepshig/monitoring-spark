@@ -2,7 +2,7 @@ from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 from pyspark.sql import SparkSession
 from pyspark import SparkContext
 import pyspark
-import time
+import datetime
 import uuid
 import json
 import sys
@@ -44,12 +44,12 @@ data.registerTempTable("voting_records")
 init_queue()
 
 for i in range(100000000):
-    start_time = time.time()
+    start_time = datetime.datetime.now()
 
     select_query = generate_query()
     results = spark.sql(select_query)
 
-    end_time = time.time()
+    end_time = datetime.datetime.now()
     results.show()
 
     publish_metric(start_time, end_time, results.count())
