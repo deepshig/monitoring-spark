@@ -141,8 +141,8 @@ services:
     depends_on:
       - rabbit_mq
       - cassandra_node1
-      # - cassandra_node2
-      # - cassandra_node3
+      - cassandra_node2
+      - cassandra_node3
       - spark-worker
     command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run..' && sleep 60 && python3 processor.py"
     environment:

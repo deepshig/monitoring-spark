@@ -7,11 +7,11 @@ The goal of this project is to monitor the load on a Spark cluster and perform d
 
 ### Architecture
 
-![Architecture](images/SparkApproach.jpg)
+![Architecture](resources/SparkApproach.jpg)
 
 The above image summarizes the architecture followed in the project. Going by details :
 
-* The data set from [Congressional Voting Records](https://www.kaggle.com/devvret/congressional-voting-records) is taken. It has a total of 17 columns for each row. Original dataset has only 435 rows. But it is too less. Thus, we exploit the fact that all the columns have only 3 possible values, and use a random generator to in the script `generate_data.py` to generate more of such rows to enhance our dataset.
+* The data set from [Congressional Voting Records](https://www.kaggle.com/devvret/congressional-voting-records) is taken. It has a total of 17 columns for each row. Original dataset has only 435 rows.
 
 * This data is then fed in `data_generator`. The aim of this part of the project is to run random queries on out `Congressional Voting Records` data, and fetch results. We monitor certain aspects of these results, like the `start_time` for the query, `time_taken` to fetch the results and `no_of_records` fetched for each query, and publish an event in the RabbitMQ.
 
@@ -19,9 +19,9 @@ The above image summarizes the architecture followed in the project. Going by de
 
 * In the package `metrics_computer`, we consume and unmarshal these events. They are used for both, batched processing and stream processing. We first store these events in a `Cassandra` database, and then feed them to a spark cluster ffor live processing.
 
-* Describe batch processing algorithm: We take the data from 'Cassandra' database and find the median and standard deviatan of the data. (Work in progress)
+* Batch processing algorithm: We take the data from 'Cassandra' database and find the median and standard deviatan of the data. (Work in progress)
 
-* stream processing algorithm: For the stream processing, data geerated from the rabbitMQ is streamed to the spark cluster directly. A connection is established in the 'socket_client.py' file. After this, the file 'streaming_processor.py' consumes the events and this is where we calculate the running average of the 'no_of_rows' data. for example a sucessfull metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/success.log#L3739) 
+* Stream processing algorithm: For the stream processing,events consumed from the RabbitMQ are streamed to the second spark cluster directly via socket port `8080`. A socker connection is established between the consumer and the spark in the 'socket_client.py' file. Consumer pushes each montioring event into this socker. The 'streaming_processor.py' consumes these events and we calculate the number of records in every 10 second window. They are printed once every 5 second. This is acheived by `countByWindow` function the `DStream`. An exemplary sucessful metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/resources/success.log#L3739)
 
 
 ### Dependencies

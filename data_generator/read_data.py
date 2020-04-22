@@ -47,7 +47,6 @@ for i in range(100000000):
     start_time = time.time()
 
     select_query = generate_query()
-    # print(select_query)
     results = spark.sql(select_query)
 
     end_time = time.time()
