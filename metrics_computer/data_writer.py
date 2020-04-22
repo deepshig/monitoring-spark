@@ -6,8 +6,7 @@ DB_FETCH_TIME_TAKEN_TABLE = 'db_fetch_time_taken'
 
 
 def create_session():
-    cluster = Cluster(
-        ['cassandra_node1', 'cassandra_node2', 'cassandra_node3'])
+    cluster = Cluster(['cassandra_node1'])
     session = cluster.connect()
     return session, cluster.shutdown
 
@@ -35,5 +34,4 @@ def get(session, id):
 
 def store_event(session, event):
     data = json.loads(event)
-    print("received event : ", data)
     insert(session, data)
