@@ -4,7 +4,7 @@ from pyspark.streaming import StreamingContext
 
 
 def processor():
-    sc = SparkContext(appName="MonitorinEvents_Streaming")
+    sc = SparkContext(appName="MonitoringEvents_Streaming")
     sc.setLogLevel("WARN")
 
     batch_duration = 1

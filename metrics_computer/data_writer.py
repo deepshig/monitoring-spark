@@ -1,4 +1,5 @@
 from cassandra.cluster import Cluster
+from cassandra.query import dict_factory
 import json
 
 KEYSPACE = 'monitoring_events'
@@ -28,9 +29,13 @@ def insert(session, data):
     session.execute(insert_query)
 
 
-def get(session, id):
-    get_query = "SELECT * FROM % WHERE id = " % (
-        DB_FETCH_TIME_TAKEN_TABLE, id)
+def get(session, start_time):
+    get_query = "SELECT * FROM %s WHERE start_time > %s ALLOW FILTERING; " % (
+        DB_FETCH_TIME_TAKEN_TABLE, start_time)
+
+    session.row_factory = dict_factory
+    rows = session.execute(get_query)
+    return rows
 
 
 def store_event(session, event):

@@ -19,7 +19,7 @@ The above image summarizes the architecture followed in the project. Going by de
 
 * In the package `metrics_computer`, we consume and unmarshal these events. They are used for both, batched processing and stream processing. We first store these events in a `Cassandra` database, and then feed them to a spark cluster ffor live processing.
 
-* Batch processing algorithm: We take the data from 'Cassandra' database and find the median and standard deviatan of the data. (Work in progress)
+* Batch processing algorithm: We take the data from `Cassandra` database and find the `median` and `standard deviatan` of the `time_taken` column.
 
 * Stream processing algorithm: For the stream processing,events consumed from the RabbitMQ are streamed to the second spark cluster directly via socket port `8080`. A socker connection is established between the consumer and the spark in the [socket_client.py](metrics_computer/socket_client.py) file. Consumer pushes each montioring event into this socker. The [streaming_processor.py](metrics_computer/streaming_processor.py) consumes these events and we calculate the number of records in every 10 second window. They are printed once every 5 second. This is acheived by [countByWindow](https://spark.apache.org/docs/latest/streaming-programming-guide.html#transformations-on-dstreams) function of the [DStream](https://spark.apache.org/docs/latest/streaming-programming-guide.html#discretized-streams-dstreams). An exemplary sucessful metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/resources/success.log#L3739)
 
