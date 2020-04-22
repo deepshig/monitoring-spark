@@ -11,7 +11,7 @@ The goal of this project is to monitor the load on a Spark cluster and perform d
 
 The above image summarizes the architecture followed in the project. Going by details :
 
-* The data set from [Congressional Voting Records](https://www.kaggle.com/devvret/congressional-voting-records) is taken. It has a total of 17 columns for each row. Original dataset has only 435 rows.
+* The data set from [Congressional Voting Records](https://www.kaggle.com/devvret/congressional-voting-records) is taken. It has a total of 17 columns for each row. Original dataset has 435 rows.
 
 * This data is then fed in `data_generator`. The aim of this part of the project is to run random queries on out `Congressional Voting Records` data, and fetch results. We monitor certain aspects of these results, like the `start_time` for the query, `time_taken` to fetch the results and `no_of_records` fetched for each query, and publish an event in the RabbitMQ.
 
@@ -21,7 +21,7 @@ The above image summarizes the architecture followed in the project. Going by de
 
 * Batch processing algorithm: We take the data from 'Cassandra' database and find the median and standard deviatan of the data. (Work in progress)
 
-* Stream processing algorithm: For the stream processing,events consumed from the RabbitMQ are streamed to the second spark cluster directly via socket port `8080`. A socker connection is established between the consumer and the spark in the 'socket_client.py' file. Consumer pushes each montioring event into this socker. The 'streaming_processor.py' consumes these events and we calculate the number of records in every 10 second window. They are printed once every 5 second. This is acheived by `countByWindow` function the `DStream`. An exemplary sucessful metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/resources/success.log#L3739)
+* Stream processing algorithm: For the stream processing,events consumed from the RabbitMQ are streamed to the second spark cluster directly via socket port `8080`. A socker connection is established between the consumer and the spark in the [socket_client.py](metrics_computer/socket_client.py) file. Consumer pushes each montioring event into this socker. The [streaming_processor.py](metrics_computer/streaming_processor.py) consumes these events and we calculate the number of records in every 10 second window. They are printed once every 5 second. This is acheived by [countByWindow](https://spark.apache.org/docs/latest/streaming-programming-guide.html#transformations-on-dstreams) function of the [DStream](https://spark.apache.org/docs/latest/streaming-programming-guide.html#discretized-streams-dstreams). An exemplary sucessful metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/resources/success.log#L3739)
 
 
 ### Dependencies
