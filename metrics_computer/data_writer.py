@@ -18,14 +18,13 @@ def create_keyspace_and_tables(session):
 
     session.set_keyspace(KEYSPACE)
 
-    create_table_query = "CREATE TABLE IF NOT EXISTS %s ( id uuid PRIMARY KEY, start_time float, time_taken float)" % DB_FETCH_TIME_TAKEN_TABLE
+    create_table_query = "CREATE TABLE IF NOT EXISTS %s ( id uuid PRIMARY KEY, start_time float, time_taken float, no_of_records int)" % DB_FETCH_TIME_TAKEN_TABLE
     session.execute(create_table_query)
 
 
 def insert(session, data):
-    insert_query = "INSERT INTO %s (id, start_time, time_taken) VALUES( %s, %s, %s);" % (
-        DB_FETCH_TIME_TAKEN_TABLE, data['id'], data['start_time'], data['time_taken'])
-    print(insert_query)
+    insert_query = "INSERT INTO %s (id, start_time, time_taken, no_of_records) VALUES( %s, %s, %s, %s);" % (
+        DB_FETCH_TIME_TAKEN_TABLE, data['id'], data['start_time'], data['time_taken'], data['no_of_records'])
     session.execute(insert_query)
 
 
