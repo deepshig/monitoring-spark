@@ -21,7 +21,7 @@ The above image summarizes the architecture followed in the project. Going by de
 
 * Describe batch processing algorithm: We take the data from 'Cassandra' database and find the median and standard deviatan of the data. (Work in progress)
 
-* stream processing algorithm: For the stream processing, data geerated from the rabbitMQ is streamed to the spark cluster directly. A connection is established in the 'socket_client.py' file. After this, the file 'streaming_processor.py' consumes the events and this is where we calculate the running average of the 'no_of_rows' data. 
+* stream processing algorithm: For the stream processing, data geerated from the rabbitMQ is streamed to the spark cluster directly. A connection is established in the 'socket_client.py' file. After this, the file 'streaming_processor.py' consumes the events and this is where we calculate the running average of the 'no_of_rows' data. for example a sucessfull metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/success.log#L3739) 
 
 
 ### Dependencies
