@@ -100,39 +100,6 @@ services:
     volumes:
       - ./data_generator:/usr/src/app/data_generator
 
-  # https://github.com/mvillarrealb/docker-spark-cluster/blob/master/docker-compose.yml
-  spark-master:
-    image: spydernaz/spark-master:2.4.3
-    container_name: spark-master
-    command: /bin/bash /start-master.sh
-    expose:
-      - 7077
-      - 8080
-      - 9090
-    ports:
-      - "9090:8080"
-      - "7077:7077"
-    volumes:
-       - ./data:/opt/spark-data
-    environment:
-      - "SPARK_LOCAL_IP=spark-master"
-
-  # To have multiple worker nodes : docker-compose up --scale spark-worker=3
-  spark-worker:
-    image: spydernaz/spark-worker:2.4.3
-    container_name: spark-worker
-    command: /bin/bash /start-worker.sh
-    depends_on:
-      - spark-master
-    environment:
-      - SPARK_MASTER=spark://spark-master:7077
-      - SPARK_WORKER_CORES=1
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_DRIVER_MEMORY=128m
-      - SPARK_EXECUTOR_MEMORY=256m
-    volumes:
-       - ./data:/opt/spark-data
-
   metrics_computer:
     build:
       context: ./
@@ -143,7 +110,6 @@ services:
       - cassandra_node1
       - cassandra_node2
       - cassandra_node3
-      - spark-worker
     command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run..' && sleep 60 && python3 processor.py"
     environment:
       AMQP_URL: 'amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
