@@ -33,7 +33,6 @@ def publish(message_body):
 
     chan.basic_publish(exchange='', routing_key=QUEUE_NAME,
                        body=message_body, properties=pika.BasicProperties(delivery_mode=2))
-    print("Produced the message")
 
 
 def consume(callback_function):

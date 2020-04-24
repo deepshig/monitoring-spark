@@ -17,17 +17,15 @@ def msg_callback_handler(ch, method, properties, body):
     ack the message"""
 
     event = body.decode('utf-8')
+    print("received event : {}".format(event))
 
     store_event(db_session, event)
-
-    data = json.loads(event)
-    time_taken = str(data['time_taken'])
-    streaming_socket.sendall(str.encode(time_taken))
+    streaming_socket.sendall(str.encode(str(event) + "\n"))
 
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def main():
+def init_consumer():
     init_queue()
     print("Initialised RabbitMQ")
 
@@ -42,11 +40,8 @@ def main():
 
     try:
         consume(msg_callback_handler)
-    except:
+    except Exception as e:
+        print("callback handler failed {}".format(e))
         shutdown_queue()
         db_cluster_shutdown()
         streaming_socket.close()
-
-
-if __name__ == '__main__':
-    main()

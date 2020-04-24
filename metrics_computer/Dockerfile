@@ -23,4 +23,4 @@ RUN apt-get update && \
 RUN pip install --no-cache-dir -r ./metrics_computer/requirements.txt
 
 # start command
-CMD [ "python", "consumer.py" ]
+CMD [ "python", "processor.py" ]

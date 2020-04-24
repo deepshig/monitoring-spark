@@ -2,7 +2,12 @@
 FROM python:3.7
 
 # Update apt-get repositories
-RUN apt-get update && apt-get install default-jdk --assume-yes
+# Install java 8
+RUN apt-get update && \
+    echo "deb http://ftp.debian.org/debian stretch main" >> /etc/apt/sources.list && \
+    echo "deb-src http://ftp.de.debian.org/debian stretch main" >> /etc/apt/sources.list && \
+    apt-get update && \
+    apt install -y openjdk-8-jdk
 
 # Without this setting, Python never prints anything out.
 ENV PYTHONUNBUFFERED=1

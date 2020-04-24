@@ -1,4 +1,5 @@
 from cassandra.cluster import Cluster
+from cassandra.query import dict_factory
 import json
 
 KEYSPACE = 'monitoring_events'
@@ -18,7 +19,7 @@ def create_keyspace_and_tables(session):
 
     session.set_keyspace(KEYSPACE)
 
-    create_table_query = "CREATE TABLE IF NOT EXISTS %s ( id uuid PRIMARY KEY, start_time float, time_taken float, no_of_records int)" % DB_FETCH_TIME_TAKEN_TABLE
+    create_table_query = "CREATE TABLE IF NOT EXISTS %s ( id uuid PRIMARY KEY, start_time bigint, time_taken int, no_of_records int)" % DB_FETCH_TIME_TAKEN_TABLE
     session.execute(create_table_query)
 
 
@@ -28,12 +29,15 @@ def insert(session, data):
     session.execute(insert_query)
 
 
-def get(session, id):
-    get_query = "SELECT * FROM % WHERE id = " % (
-        DB_FETCH_TIME_TAKEN_TABLE, id)
+def get(session, start_time):
+    get_query = "SELECT * FROM %s WHERE start_time > %s ALLOW FILTERING; " % (
+        DB_FETCH_TIME_TAKEN_TABLE, start_time)
+
+    session.row_factory = dict_factory
+    rows = session.execute(get_query)
+    return rows
 
 
 def store_event(session, event):
     data = json.loads(event)
-    print("received event : ", data)
     insert(session, data)

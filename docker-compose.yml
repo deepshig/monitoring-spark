@@ -144,7 +144,7 @@ services:
       - cassandra_node2
       - cassandra_node3
       - spark-worker
-    command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run..' && sleep 60 && python3 consumer.py"
+    command: /bin/bash -c "echo 'Waiting for cassandra and rabbitmq to run..' && sleep 60 && python3 processor.py"
     environment:
       AMQP_URL: 'amqp://rabbit_mq?connection_attempts=10&retry_delay=10'
     volumes:
