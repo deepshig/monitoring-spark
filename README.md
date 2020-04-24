@@ -1,11 +1,8 @@
-
-# 2020_group_06_s4210875_s4199456_s4208110
-
-## Monitoring Spark
+# Monitoring Spark
 
 The goal of this project is to monitor the load on a Spark cluster and perform different types of profiling, and thus determining the bottlenecks and the performance of different algorithms.
 
-### Architecture
+## Architecture
 
 ![Architecture](resources/SparkApproach.jpg)
 
@@ -24,7 +21,7 @@ The above image summarizes the architecture followed in the project. Going by de
 * Stream processing algorithm: For the stream processing,events consumed from the RabbitMQ are streamed to the second spark cluster directly via socket port `8080`. A socker connection is established between the consumer and the spark in the [socket_client.py](metrics_computer/socket_client.py) file. Consumer pushes each montioring event into this socker. The [streaming_processor.py](metrics_computer/streaming_processor.py) consumes these events and we calculate the number of records in every 10 second window. They are printed once every 5 second. This is acheived by [countByWindow](https://spark.apache.org/docs/latest/streaming-programming-guide.html#transformations-on-dstreams) function of the [DStream](https://spark.apache.org/docs/latest/streaming-programming-guide.html#discretized-streams-dstreams). An exemplary sucessful metric can be [found here](https://github.com/rug-sc/2020_group_06_s4210875_s4199456_s4208110/blob/stream-batch-processing/resources/success.log#L3739)
 
 
-### Dependencies
+## Dependencies
 
 The project uses the following technological stack :
 
@@ -36,7 +33,7 @@ The project uses the following technological stack :
 * [Cassandra 3.11.6](http://cassandra.apache.org/) : We use Cassandra to store the historical data of monitoring events, which is further used for batch processing. Given the current implementation, we could have very achieved similar results with a RDBMS like PostgreSQL too.
 * [Python-Cassandra-Driver 3.22.0](https://docs.datastax.com/en/developer/python-driver/3.22/) : It enables us to use the Cassandra APIs in Python
 
-### Running the program
+## Running the program
 
 * To run `docker-compose up`
 
